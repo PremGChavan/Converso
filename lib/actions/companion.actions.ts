@@ -11,7 +11,8 @@ export const createCompanion = async ( formData: CreateCompanion) => {
   .from('companions')
   .insert({ ...formData, author})
   .select();
-
+  // console.log(data, error);
+  
   if ( error || !data ) throw new Error(error?.message || "Failed to create companion");
 
   return data[0];
