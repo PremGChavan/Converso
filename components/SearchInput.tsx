@@ -9,32 +9,37 @@ const SearchInput = () => {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const query = searchParams.get( 'topic' ) || '' 
+  // const query = searchParams.get( 'topic' ) || '' ;
 
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
+      let newUrl = '';
+
       if (searchQuery) {
-        const newUrl = formUrlQuery({
+        newUrl = formUrlQuery({
           params: searchParams.toString(),
           key: "topic",
           value: searchQuery,
         });
-        router.push(newUrl, { scroll: false });
-      } else {
-        if( pathname === '/companions') {
-          const newUrl = removeKeysFromUrlQuery({
+      } else if ( pathname === '/companions') {
+          newUrl = removeKeysFromUrlQuery({
           params: searchParams.toString(),
           keysToRemove: ["topic"],
         });
-  
-        router.push(newUrl, { scroll: false });
-        }
       }
-    }, 800);
 
-  }, [searchQuery, router, searchParams, pathname])
+      if (newUrl && newUrl !== `${window.location.pathname}?${searchParams.toString()}`) {
+        console.log("log from search Input");
+        router.push(newUrl, { scroll: false });
+        
+      }
+    }, 500);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchQuery, pathname, router, searchParams]);
+
 
   return (
       <div className="relative border border-black rounded-lg items-center flex gap-2 px-2 py-1 h-fit">

@@ -1,6 +1,5 @@
 "use client";
-
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Select,
   SelectContent,
@@ -16,13 +15,38 @@ import { formUrlQuery, removeKeysFromUrlQuery } from "@jsmastery/utils";
 const SubjectFilter = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const query = searchParams.get("subject") || "";
+  const query = searchParams.get("subject") || "all";
 
-  const [subject, setSubject] = useState(query);
+  // searchParam with using state  
+  // const [subject, setSubject] = useState(query);
 
-  useEffect(() => {
+  // useEffect(() => {
+  //   if(!subject) return;
+
+  //   let newUrl = "";
+  //   if (subject === "all") {
+  //     newUrl = removeKeysFromUrlQuery({
+  //       params: searchParams.toString(),
+  //       keysToRemove: ["subject"],
+  //     });
+  //   } else {
+  //     newUrl = formUrlQuery({
+  //       params: searchParams.toString(),
+  //       key: "subject",
+  //       value: subject,
+  //     });
+  //   }
+  //   if(newUrl !== `${window.location.pathname}?${searchParams.toString()}`){
+  //     router.push(newUrl, { scroll: false });
+  //   }
+  // }, [subject, searchParams, router]);
+
+
+  // searchParam without using states
+
+  const handleChange = (value: string) => {
     let newUrl = "";
-    if (subject === "all") {
+    if (value === "all") {
       newUrl = removeKeysFromUrlQuery({
         params: searchParams.toString(),
         keysToRemove: ["subject"],
@@ -31,14 +55,16 @@ const SubjectFilter = () => {
       newUrl = formUrlQuery({
         params: searchParams.toString(),
         key: "subject",
-        value: subject,
+        value,
       });
     }
     router.push(newUrl, { scroll: false });
-  }, [subject]);
+  };
+  
+
 
   return (
-    <Select onValueChange={setSubject} value={subject}>
+    <Select onValueChange={handleChange} value={query}>
       <SelectTrigger className="input capitalize">
         <SelectValue placeholder="Subject" />
       </SelectTrigger>
