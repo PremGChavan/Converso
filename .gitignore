@@ -47,3 +47,5 @@ next-env.d.ts
 
 # misc
 notes.txt
+.vscode/
+.idea/
