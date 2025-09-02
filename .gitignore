@@ -43,9 +43,12 @@ next-env.d.ts
 
 # clerk configuration (can include secrets)
 /.clerk/
+<<<<<<< HEAD
 
 
 # misc
 notes.txt
 .vscode/
 .idea/
+=======
+>>>>>>> parent of a5bac1f (Handeled some error in search input & subject filter components, setup Vapi Ai for companion conversation & created companions[id] component)

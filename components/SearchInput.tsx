@@ -9,44 +9,39 @@ const SearchInput = () => {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
-  // const query = searchParams.get( 'topic' ) || '' ;
+  const query = searchParams.get( 'topic' ) || '' 
 
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
-      let newUrl = '';
-
       if (searchQuery) {
-        newUrl = formUrlQuery({
+        const newUrl = formUrlQuery({
           params: searchParams.toString(),
           key: "topic",
           value: searchQuery,
         });
-      } else if ( pathname === '/companions') {
-          newUrl = removeKeysFromUrlQuery({
+        router.push(newUrl, { scroll: false });
+      } else {
+        if( pathname === '/companions') {
+          const newUrl = removeKeysFromUrlQuery({
           params: searchParams.toString(),
           keysToRemove: ["topic"],
         });
-      }
-
-      if (newUrl && newUrl !== `${window.location.pathname}?${searchParams.toString()}`) {
-        console.log("log from search Input");
+  
         router.push(newUrl, { scroll: false });
-        
+        }
       }
-    }, 500);
+    }, 800);
 
-    return () => clearTimeout(delayDebounceFn);
-  }, [searchQuery, pathname, router, searchParams]);
-
+  }, [searchQuery, router, searchParams, pathname])
 
   return (
-      <div className="relative border border-black rounded-lg items-center flex gap-2 px-2 py-1 h-fit">
-        <Image src="/icons/search.svg" alt="search" width={15} height={15} />
+    <div className="relative border border-black rounded-lg items-center flex gap-2 px-2 py-1 h-fit">
+      <Image src="/icons/search.svg" alt="search" width={15} height={15} />
 
-        <input type="text" name="" id="" placeholder="Search companion..." className="outline-none" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
-      </div>
+      <input type="text" name="" id="" placeholder="Search companion..." className="outline-none" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
+    </div>
   );
 };
 
